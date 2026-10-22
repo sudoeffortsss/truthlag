@@ -1,16 +1,19 @@
 /**
- * The model arms: built, tested, and deliberately not run.
+ * The model arms: three registered, one run.
  *
  * Three tiers are registered so that "which model" becomes an axis the benchmark
  * measures rather than a decision someone has to defend: how much accuracy does four
- * times the price buy? The interface, the prompt, the parser, the cost gate and the
- * estimator all exist. What has not happened is a paid execution.
+ * times the price buy? Each arm carries its price and a verified training cutoff, so
+ * the estimator can price all three.
  *
- * That is a deliberate stopping point, not an unfinished one. Spending money is a
- * decision with a number attached, and a benchmark should not make it quietly on
- * someone's behalf. `truthlag estimate` prints the projected spend and exits.
+ * Only the Gemini arm has been run: 19,188 calls for $14.78 (README, F15, F17). It is
+ * also the only arm with a client in this repository (`gemini.ts`). The two Claude
+ * arms price at $90.51 batched, over the $50 ceiling `BudgetGate` holds this project
+ * to, so they stay unrun and have no client yet. Spending money is a decision with a
+ * number attached, and a benchmark should not make it quietly on someone's behalf.
+ * `truthlag estimate` prints the projected spend and exits.
  *
- * When a run does happen, the rules that make this a benchmark still apply:
+ * Whenever an arm runs, the rules that make this a benchmark still apply:
  * unparseable output, timeouts and refusals become `no_answer` and stay in the
  * denominator. That matters more here than anywhere else, because rules almost never
  * fail to parse and models do it constantly. The LLM tier is what makes harness rule 1
@@ -323,7 +326,11 @@ export class BudgetGate {
     }
   }
 
-  /** Checked before a call, so an over-budget request is never issued at all. */
+  /**
+   * Not called by the runner; only the tests use it. The runner records each call's
+   * cost after the response arrives (`gemini.ts`), and `record` throws on the call that
+   * crosses the ceiling, so a run can go over by at most that one call.
+   */
   canAfford(usd: number): boolean {
     return this.spent + usd <= this.ceilingUsd;
   }
