@@ -66,7 +66,7 @@ Everything above cost nothing to produce. No model was called.
 | schema and migrations | ✅ 10 tables |
 | universe frozen | ✅ 3,215 packages, hash `00ecc34b2137ea` |
 | ingest and reconstruction | ✅ 3,204 of 3,215, F8 |
-| rule policies and harness | ✅ 42 tests, F11–F14 |
+| rule policies and harness | ✅ F11–F14 |
 | **first numbers** | ✅ **above, $0** |
 | Gemini arm | ✅ 19,188 calls, $14.78, F15 and F17 |
 | Claude arms | ⏸ built and registered, cutoffs verified (F15), **deliberately unrun** |
@@ -228,7 +228,7 @@ packages. That is a deliberate choice — a benchmark nobody can re-run is a blo
 ```bash
 npm install
 npm run migrate     # creates the schema
-npm test            # 11 proofs, including that re-running ingest inserts zero rows
+npm test            # 99 tests, including that re-running ingest inserts zero rows
 ```
 
 The probes behind every finding are in `probe/`, run with a fixed seed, and write their
